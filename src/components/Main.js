@@ -65,11 +65,42 @@ var ImgFigure = React.createClass({
         <img src={this.props.data.imageURL} alt={this.props.data.title} />
         <figcaption>
           <h2 className="img-title">{this.props.data.title}</h2>
-           <div className="img-back" onClick={this.handleClick}>
-            <p>{this.props.data.desc}</p>
-           </div>
+          <div className="img-back" onClick={this.handleClick}>
+          <p>{this.props.data.desc}</p>
+          </div>
         </figcaption>
       </figure>
+    )
+  }
+})
+
+var ControllerUnit = React.createClass({
+  handleClick: function (e) {
+
+    // 如何点击的图片的剧中,进行翻转
+    if (this.props.arrange.isCenter) {
+      this.props.inverse()
+    } else {
+      this.props.center()
+    }
+    e.stopPropagation()
+    e.preventDefault()
+  },
+  render: function () {
+    console.log(11)
+    var controllerUnitClassName = 'controller-unit'  // 里面包含箭头icon样式
+
+    // 如果对应的是剧中图片,显示控制按钮的居中态
+    if (this.props.arrange.isCenter) {
+      controllerUnitClassName += ' is-center'
+        // 如果同时对应的翻转图片,显示控制按钮的翻转态
+      if (this.props.arrange.isInverse) {
+        controllerUnitClassName += ' is-inverse'
+      }
+    }
+    return (
+      <span className={controllerUnitClassName} onClick={this.handleClick}>
+      </span>
     )
   }
 })
@@ -128,7 +159,7 @@ var AppComponent = React.createClass ({
     var imgsArrangArr = this.state.imgsArrangeArr, //提取位置信息,方便引用
         Constant = this.Constant,  // 位置
         centerPos = Constant.centerPos,
-        hPosRange = Constant.hPosRange, 
+        hPosRange = Constant.hPosRange,
         vPosRange = Constant.vPosRange,
         hPosRangeLeftSecX = hPosRange.leftSecX,
         hPosRangeRightSecX = hPosRange.rightSecX,
@@ -189,7 +220,7 @@ var AppComponent = React.createClass ({
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
           imgsArrangArr.splice(topImgSpliceIndex, 0, imgsArrangeTopArr[0])
         }
-        imgsArrangArr.splice(centerIndex, 0, imgsArrangeCenterArr[0]) 
+        imgsArrangArr.splice(centerIndex, 0, imgsArrangeCenterArr[0])  // 根据图片序号设置居中图片
 
   
         this.setState({
@@ -250,17 +281,19 @@ var AppComponent = React.createClass ({
           isCenter: false
         }
       }
-      imgFigures.push(<ImgFigure data={item}
-        inverse={this.inverse(index)} center={this.center(index)}
-        ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]}/>)
-
+      imgFigures.push(<ImgFigure data={item} key={index}
+                        inverse={this.inverse(index)} center={this.center(index)}
+                        ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]}/>)
+      controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />)
     }.bind(this))
     return (
       <section className="stage" ref="stage">
         <section className="img-sec">
           {imgFigures}
         </section>
-        <nav className="controller-nav"></nav>
+        <nav className="controller-nav">
+          {controllerUnits}
+        </nav>
       </section>
     );
   }

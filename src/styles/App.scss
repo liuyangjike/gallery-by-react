@@ -1,3 +1,13 @@
+// 用字体文件的声明
+@font-face{
+  font-family: "icons-arrow";
+  src: url("../font/iconfont/iconfont.woff") format("woff"),
+       url("../font/iconfont/iconfont.ttf") format("truetype"),
+       url("../font/iconfont/iconfont.eot") format("embedded-opentype"),
+       url("../font/iconfont/iconfont.svg") format("svg");
+
+}
+
 html, body{
   width: 100%;
   height: 100%;
@@ -111,11 +121,11 @@ html, body{
 
          &::after {
            color: #fff;
-           font-family: "icons-turn-arrow";
-           font-size: 80%;
+           font-family: "icons-arrow" !important;
+           font-size: 90%;
            line-height: 30px;
-           content: "\e600";
-           -webkit-font-smoothing: antialiased;
+           content: "\e6a0";
+           -webkit-font-smoothing: antialiased;  //字体渲染的灰阶平化
            -moz-osx-font-smoothing: grayscale;
          }
 
